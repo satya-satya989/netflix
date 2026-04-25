@@ -6,6 +6,7 @@ pipeline {
     }
 
     environment {
+        CI = "false"
         NODE_OPTIONS = "--openssl-legacy-provider"
     }
 
@@ -39,8 +40,8 @@ pipeline {
         stage('Build React App') {
             steps {
                 sh '''
-                    export NODE_OPTIONS=--openssl-legacy-provider
-                    npm run build
+                export NODE_OPTIONS=--openssl-legacy-provider
+                CI=false npm run build
                 '''
             }
         }
@@ -54,9 +55,9 @@ pipeline {
         stage('Docker Run') {
             steps {
                 sh '''
-                    docker stop swiggy-container || true
-                    docker rm swiggy-container || true
-                    docker run -d -p 3010:80 --name swiggy-container swiggy-app
+                docker stop swiggy-container || true
+                docker rm swiggy-container || true
+                docker run -d -p 3010:80 --name swiggy-container swiggy-app
                 '''
             }
         }
