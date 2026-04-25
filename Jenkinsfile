@@ -32,13 +32,16 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm ci'
+                sh 'npm install'
             }
         }
 
         stage('Build React App') {
             steps {
-                sh 'npm run build'
+                sh '''
+                    export NODE_OPTIONS=--openssl-legacy-provider
+                    npm run build
+                '''
             }
         }
 
