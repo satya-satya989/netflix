@@ -9,7 +9,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-               checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'gitcred', url: 'https://github.com/karlhadwen/netflix.git']])
+              checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'gitcred', url: 'https://github.com/Satya-satya989/netflix.git']])
             }
         }
 
