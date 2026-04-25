@@ -7,6 +7,10 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+
+# 👇 ADD THIS LINE (IMPORTANT FIX)
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
 RUN npm run build
 
 # Step 2: Serve using Nginx
