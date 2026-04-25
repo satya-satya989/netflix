@@ -6,8 +6,8 @@ pipeline {
     }
 
     environment {
-        CI = "false"
         NODE_OPTIONS = "--openssl-legacy-provider"
+        CI = "false"
     }
 
     stages {
@@ -20,14 +20,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                checkout scmGit(
-                    branches: [[name: '*/master']],
-                    extensions: [],
-                    userRemoteConfigs: [[
-                        credentialsId: 'gitcred',
-                        url: 'https://github.com/Satya-satya989/netflix.git'
-                    ]]
-                )
+                checkout scm
             }
         }
 
@@ -39,10 +32,13 @@ pipeline {
 
         stage('Build React App') {
             steps {
-                sh '''
-                export NODE_OPTIONS=--openssl-legacy-provider
-                CI=false npm run build
-                '''
+                sh 'npm run build'
+            }
+        }
+
+        stage('Verify Dockerfile') {
+            steps {
+                sh 'ls -la Dockerfile || echo "Dockerfile NOT FOUND ❌"'
             }
         }
 
@@ -55,9 +51,9 @@ pipeline {
         stage('Docker Run') {
             steps {
                 sh '''
-                docker stop swiggy-container || true
-                docker rm swiggy-container || true
-                docker run -d -p 3010:80 --name swiggy-container swiggy-app
+                    docker stop swiggy-container || true
+                    docker rm swiggy-container || true
+                    docker run -d -p 3010:80 --name swiggy-container swiggy-app
                 '''
             }
         }
